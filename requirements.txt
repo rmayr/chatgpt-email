@@ -1,3 +1,5 @@
 revChatGPT
-email
-logger
+
+# these should be a default for most Python3 installations
+#email
+#logger
