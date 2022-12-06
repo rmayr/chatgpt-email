@@ -15,8 +15,8 @@ logger.addHandler(handler)
 
 # example from https://github.com/acheong08/ChatGPT
 configfile = open("config.json", "r")
-config = configfile.read()
-logger.debug("Using login data: " + config)
+config = json.load(configfile)
+logger.debug("Using login data: " + config["email"] + " / " + config["password"])
 
 promptfile = open("queryprompt.txt", "r")
 queryprompt = promptfile.read()
@@ -28,7 +28,7 @@ logger.debug("Processing new incoming email message: " + newmsg.as_string())
 
 # TODO: use the email thread-id as conversation_id
 chatbot = Chatbot(config, conversation_id=None)
-chatbot.reset_chat() # Forgets conversation
+#chatbot.reset_chat() # Forgets conversation
 chatbot.refresh_session() # Uses the session_token to get a new bearer token
 resp = chatbot.get_chat_response(queryprompt, output="text") # Sends a request to the API and returns the response by OpenAI
 logger.debug("Response to query prompt: " + resp['message']) # The message sent by the response
