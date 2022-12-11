@@ -2,5 +2,6 @@
     "email": "<YOUR_EMAIL_REGISTERED_WITH_CHATGPT>",
     "password": "<YOUR_PASSWORD_REGISTERED_WITH_CHATGPT>",
     "spamtrap": "thisisme@mydomain.com",
-    "smtpserver": "localhost"
+    "smtpserver": "localhost",
+    "querypromptfile": "queryprompt.txt"
 }

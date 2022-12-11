@@ -8,21 +8,25 @@ import logging
 import sys
 from email.message import EmailMessage
 
+if (len(sys.argv) < 3):
+    print("Usage: " + sys.argv[0] + " <full file path of config.json> <log file name>")
+    sys.exit(1)
+
 # example from https://pythonexamples.org/python-logging-debug/
 logger = logging.getLogger('chatgpt-email')
 logger.setLevel(logging.DEBUG)
 
-handler = logging.FileHandler('emailbot.log')
+handler = logging.FileHandler(sys.argv[2])
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 # example from https://github.com/acheong08/ChatGPT
-configfile = open("config.json", "r")
+configfile = open(sys.argv[1], 'r')
 config = json.load(configfile)
 logger.debug("Using login data: " + config['email'] + " / " + config['password'])
 
-promptfile = open('queryprompt.txt', 'r')
+promptfile = open(config['querypromptfile'], 'r')
 queryprompt = promptfile.read()
 logger.debug("Prompt query for priming ChatGPT session: " + queryprompt)
 
@@ -35,7 +39,8 @@ if (not replyaddr):
 if (not replyaddr):
     replyaddr = newmsg['Return-Path']
 if (not replyaddr):
-    sys.exit("Unable to parse email message for from/reply-to/return-path address")
+    print("Unable to parse email message for from/reply-to/return-path address")
+    sys.exit(2)
     
 receivedaddr = newmsg['To']
 if (not receivedaddr):
@@ -43,7 +48,8 @@ if (not receivedaddr):
 if (not receivedaddr):
     receivedaddr = config['spamtrap']
 if (not receivedaddr):
-    sys.exit("Unable to parse email message for to/delivered-to address and fallback spamtrap address not configured")
+    print("Unable to parse email message for to/delivered-to address and fallback spamtrap address not configured")
+    sys.exit(3)
 
 subject = newmsg['Subject']
 if (not subject):
@@ -75,7 +81,8 @@ for m in newmsg.walk():
             msgbody = str(m.get_payload(decode=True),encoding='utf-8')
             logger.debug("Parsed email message body: " + msgbody)
         except:
-            sys.exit("Unable to parse email message for text/plain part")
+            print("Unable to parse email message for text/plain part")
+            sys.exit(4)
 
 # and finally create reply message
 replymsg = EmailMessage()
