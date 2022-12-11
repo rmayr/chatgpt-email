@@ -92,7 +92,9 @@ replymsg['Subject'] = "Re: " + subject
 if (messageid):
     replymsg['In-Reply-To'] = messageid
 
+# now the real ChatGPT action
 resp = chatbot.get_chat_response(msgbody, output="text")
+
 logger.debug("Response to incoming email message: " + resp['message'])
 replymsg.set_content(resp['message'])
 
