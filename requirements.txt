@@ -2,4 +2,5 @@ revChatGPT
 
 # these should be a default for most Python3 installations
 #email
+#smtplib
 #logger
